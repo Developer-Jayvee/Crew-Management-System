@@ -21,7 +21,7 @@ return new class extends Migration
             $table->float('Weight');
             $table->float('Height');
             $table->char('Rank',5);
-            $table->integer('Usertype');
+            $table->string('Usertype',5);
             $table->string('Address', 300);
             $table->string('Email', 150);
             $table->dateTime('DateCreated');

@@ -126,8 +126,11 @@
                     <div class="row">
                         <form v-on:submit.prevent="submitUserType" ref="userTypeForm">
                             <div class="row">
-                                <div class="col-lg-8">
-                                    <input type="text" class="form-control" v-model="user.type" required>
+                                <div class="col-lg-2">
+                                    <input type="text" class="form-control" v-model="user.code" placeholder="Code" required>
+                                </div>
+                                <div class="col-lg-6">
+                                    <input type="text" class="form-control" v-model="user.type" placeholder="Description" required>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="row">
@@ -147,14 +150,14 @@
                                 <table class="table table-hover">
                                     <thead class="sticky-top bg-white">
                                         <tr>
-                                            {{-- <th>#</th> --}}
+                                            <th>Code</th>
                                             <th @click="sort('description','usertype')">User Type  <span v-if="sortKey === 'description' && sortSetup == 'usertype' ">@{{ sortOrder === 'asc' ? '↑' : '↓' }}</span></th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                          <tr v-for="(user,index) in userTypeList" :key="user.code">
-                                            {{-- <td>@{{ index + 1 }}</td> --}}
+                                            <td>@{{ user.code }}</td>
                                             <td>@{{ user.description }}</td>
                                             <td>
                                                 <div class="btn-group">
@@ -196,6 +199,7 @@ $(document).ready(function(){
                 },
                 user:{
                     type:"",
+                    code:""
                 }
             }
         },
@@ -305,7 +309,7 @@ $(document).ready(function(){
             async submitUserType(){
                 const formData = new FormData();
                 formData.append('description',this.user.type);
-               
+                formData.append('code',this.user.code);
                 
                 const response = await fetch("{{ route('add/UserType') }}",{
                     method:"POST",
@@ -321,6 +325,7 @@ $(document).ready(function(){
                         const codeExists = this.userTypeList.some(item => item.description === this.user.type);
                         if(!codeExists){
                             this.userTypeList = [...this.userTypeList, { 
+                                code :this.user.code,
                                 description: this.user.type,
                             }];
                         }

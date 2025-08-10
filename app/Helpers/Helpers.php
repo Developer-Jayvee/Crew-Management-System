@@ -31,14 +31,14 @@ class Helpers
         return $response;      
     }
      public function userTypeList($code ='',$addBlank = false , $exclude = array()){
-        $ranks =  UserTypes::whereNotIn('ID',$exclude)->get()->map(function($row){
+        $ranks =  UserTypes::whereNotIn('Code',$exclude)->get()->map(function($row){
             return array(
-                'ID' => $row->ID,
+                'Code' => $row->Code,
                 'description' => $row->UserType
             );
         });
         $response = $addBlank ? array('' => ' - Select User Type -') : array();
-        foreach ($ranks as $r) $response[$r['ID']] = $r['description'];
+        foreach ($ranks as $r) $response[$r['Code']] = $r['description'];
 
         ksort($response);
         return $response;      

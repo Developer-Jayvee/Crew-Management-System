@@ -19,10 +19,10 @@
 <nav class="navbar bg-body-tertiary" id="navigation-bar">
     <div class="container-fluid ">
         <a class="navbar-brand" href="#">
-            <h3>{{ isset(Auth::user()->Usertype) && Auth::user()->Usertype == '3' ? 'Welcome '.Auth::user()->Username.'!':  'ADMIN' }} </h3>
+            <h3>{{ isset(Auth::user()->Usertype) && Auth::user()->Usertype == 'G' ? 'Welcome '.Auth::user()->Username.'!':  'ADMIN' }} </h3>
         </a>
         <ul class="nav nav-pills  justify-content-end pe-5" id="pills-tab" role="tablist">
-            @if( isset(Auth::user()->Usertype) && in_array( Auth::user()->Usertype,['3','2']))
+            @if( isset(Auth::user()->Usertype) && in_array( Auth::user()->Usertype,['S','G']))
 
             @else
                 <li class="nav-item" role="presentation">

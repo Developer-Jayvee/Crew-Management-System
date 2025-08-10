@@ -19,11 +19,11 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             switch(Auth::user()->Usertype){
-                case 1:
+                case 'A':
                     return redirect()->intended('admin/crew');
-                case 2:
+                case 'G':
                     return redirect()->intended('crew/dashboard');
-                case 3:
+                case 'S':
                     return redirect()->intended('staff/dashboard');
             }
         }

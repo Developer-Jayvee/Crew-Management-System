@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('Username', 200);
             $table->string('Password', 200);
             $table->string('Email',200);
-            $table->integer('Usertype');
+            $table->string('Usertype',5);
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('TimeStamp')->nullable();
             $table->dateTime('LastLogin')->nullable();

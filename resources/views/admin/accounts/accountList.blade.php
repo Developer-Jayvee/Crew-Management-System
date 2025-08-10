@@ -74,8 +74,8 @@ $(document).ready(function(){
                                     });
                             const result = await response.json();
                             if(result){
-                                location.reload();
-                                // this.userList = this.userList.filter( user => user.username !== username );
+                                // location.reload();
+                                this.userList = this.userList.filter( user => user.username !== username );
                             }
                         }
                     });
@@ -103,6 +103,11 @@ $(document).ready(function(){
             }
         }
     }).mount("#accountList");
+    globalModal.on('hidden.bs.modal', function () {
+        if($(this).find('.modal-title').text() == 'Add New User Account'){
+            location.reload();
+        }
+    });
 });
 </script>
 @endsection

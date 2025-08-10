@@ -16,6 +16,7 @@ class UserTypes extends Model
     public $timestamps = true;
     
     protected $fillable = [
+        'Code',
         'UserType',
     ];
 }

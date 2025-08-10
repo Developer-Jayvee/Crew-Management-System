@@ -38,6 +38,8 @@ Route::controller(APISetupController::class)->group(function(){
     Route::prefix('usertypes')->group(function () {
         Route::post('create','createNewUserType');
         Route::get('show','showUserTypes');
+        Route::patch('update','updateUserType');
+        Route::delete('delete','deleteUserType');
     });
 });
 

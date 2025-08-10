@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::connection('mysql_users')->create('tblUserTypes', function (Blueprint $table) {
             $table->id('ID');
+            $table->char('CODE',5);
             $table->string('UserType', 100);
             $table->dateTime('DateCreated')->useCurrent(); 
             $table->dateTime('DateUpdated')->useCurrent();
@@ -21,9 +22,8 @@ return new class extends Migration
         });
 
         DB::connection('mysql_users')->table('tblUserTypes')->insert([
-            ['UserType' => 'Admin'],
-            ['UserType' => 'Guest'],
-            ['UserType' => 'Staff']
+            ['CODE' => 'G','UserType' => 'Admin'],
+            ['CODE' => 'G', 'UserType' => 'Guest'],
         ]);
     }
 

@@ -336,12 +336,19 @@ class APISetupController extends Controller
                        'string',
                        'max:100',
                        'regex:/^[a-zA-Z]+$/'
-                   ]
+               ],
+               'Code' => [
+                    'required',
+                    'string',
+                    'max:5',
+               ]
                ],
                [
                    'Usertype.required' => 'Usertype is required',
+                   'Code.required' => 'Code is required'
                ]);
                UserTypes::create([
+                    'Code' => $request->Code,
                    'UserType' => $request->Usertype,
                ]);
                return response()->json([
@@ -361,19 +368,22 @@ class APISetupController extends Controller
     public function showUserTypes(Request $request){
         try {
             $validatedData = $request->validate([
-               'UserType' => 'max:200',
+                'Code' => 'max:5',
+                'UserType' => 'max:200',
             ]);
             $response = array();
 
             $response['usertypeList'] = UserTypes::query()
             ->orWhere(function($w) use($request){
                 if(isset($request->Search) && !empty($request->Search)){
-                    $w->orWhere('UserType',$request->Search);
+                    $w->orWhere('UserType',$request->Search)
+                    ->orWhere('Code',$request->Search);
                 }
             })
             ->paginate($request->limit ? $request->limit : 15)
             ->through(function($row) {
                 return [
+                    'Code' => $row->Code,
                     'UserType' => $row->UserType,
                 ];
             });
@@ -382,6 +392,72 @@ class APISetupController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to retrieve User Types',
+                'error' => $th->getMessage()
+            ], 500);
+        }
+    }
+     public function updateUserType(Request $request){
+        try {
+            $validatedData = $request->validate([
+                'Code' => 'max:10|string|required',
+                'UserType' => 'max:200',
+            ],
+            [
+                'Code.required' =>'Code is required.',
+            ]);
+            $response = array();
+            $status = 200;
+            $isUsed = CrewProfile::where('Usertype',$validatedData['Code'])->count();
+            if(!UserTypes::where('Code',$validatedData['Code'])->exists()){
+                $response = ['message' => 'User Type does not exists.' ];
+                $status = 500;
+            }else if($isUsed > 0) {
+                $response = ['message' => 'User Type is currently used.' ];
+                $status = 500;
+            }
+            else{
+                UserTypes::query()
+                ->where('Code',$validatedData['Code'])
+                ->update($validatedData);
+                $response['message'] = 'Successfully updated existing user type.';
+            }
+            return response()->json($response, $status);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to update user type',
+                'error' => $th->getMessage()
+            ], 500);
+        }
+    }
+    public function deleteUserType(Request $request){
+        try {
+            $validatedData = $request->validate([
+              'Code' => 'max:10|string|required',
+            ],
+            [
+                'Code.required' =>'Code is required.'
+            ]);
+            $response = array();
+            $status = 200;
+            $isUsed = CrewProfile::where('Code',$validatedData['Code'])->count();
+            $user = UserTypes::where('Code',$validatedData['Code'])->first();
+            if(empty($user)){
+                $response = ['message' => 'User Type does not exists.' ];
+                $status = 500;
+            }else if($isUsed > 0) {
+                $response = ['message' => 'User Type is currently used.' ];
+                $status = 500;
+            }
+            else{
+                $user->delete();
+                $response['message'] = 'Successfully deleted existing User Type.';
+            }
+            return response()->json($response, $status);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to delete User Type',
                 'error' => $th->getMessage()
             ], 500);
         }

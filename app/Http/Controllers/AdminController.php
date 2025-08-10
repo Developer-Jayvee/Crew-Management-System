@@ -27,7 +27,7 @@ class AdminController extends Controller
         $docList = HelperFacade::documentTypes('',true);
         $response['docList'] = collect($docList);
         $response['rankList'] = collect(HelperFacade::rankList('',true));
-        $response['crewList'] = CrewProfile::with(['profileRank','documentSubmitted.document'])->where('Usertype','2')->get()->collect()->map(function($row) use($docList){
+        $response['crewList'] = CrewProfile::with(['profileRank','documentSubmitted.document'])->where('Usertype','G')->get()->collect()->map(function($row) use($docList){
             $documents = [];
             if($row->documentSubmitted){
                 foreach($row->documentSubmitted as $d){
@@ -148,7 +148,7 @@ class AdminController extends Controller
         });
         $userTypeList = UserTypes::get()->collect()->map(function($row){
             return [
-                'code' => $row->ID,
+                'code' => $row->Code,
                 'description' => $row->UserType,
             ];
         });
@@ -204,9 +204,10 @@ class AdminController extends Controller
 
     public function addNewUserType(Request $req){
         $data = (object) $req->all();
-        $checkIfExist = UserTypes::where('UserType',$data->description)->exists();
+        $checkIfExist = UserTypes::where('Code',$data->code)->exists();
         if(!$checkIfExist){
             UserTypes::create([
+                'Code' => $data->code,
                 'UserType' => $data->description,
             ]);
             return response()->json(['status' => 1 ,'message' => 'Successfully added user type']);
@@ -214,8 +215,8 @@ class AdminController extends Controller
         return 0;
     }
     public function deleteUserType(UserTypes $usertype , $code){
-        $delete = $usertype->where('ID',$code)->first();
-        $checkIfUsed = User::where('Usertype',$delete->ID)->count();
+        $delete = $usertype->where('Code',$code)->first();
+        $checkIfUsed = User::where('Usertype',$code)->count();
         if($checkIfUsed > 0){
             return response()->json(['status' => 0 ,'message' => 'User type is currently used.']);
         }
@@ -238,7 +239,7 @@ class AdminController extends Controller
     public function deleteUserAccount(User $user, $username){
         $useracc = $user->where('Username',$username)->with('userprofile')->first();
         if($useracc){
-            $useracc->userprofile->delete();
+            if(!empty($useracc->userprofile)) $useracc->userprofile->delete();
             $useracc->delete();
             return response()->json(['message' => 'Successfully deleted.']);
         }
@@ -249,7 +250,7 @@ class AdminController extends Controller
         return view('admin.accounts.updateuser',compact('useracc'));
     }
     public function addNewUser(Request $req){
-        $userTypeList  = HelperFacade::userTypeList('',false,[3]);
+        $userTypeList  = HelperFacade::userTypeList('',false,['G']);
         return view('admin.accounts.addNewUser',compact('userTypeList'));
     }
     public function saveNewAccount(Request $req){
@@ -262,7 +263,7 @@ class AdminController extends Controller
                 'Username' => $data->username,
                 'Email' => $data->email,
                 'Usertype' => $data->type,
-                'cpassword' => Hash::make($data->cpassword)
+                'Password' => Hash::make($data->cpassword)
             ]);
             return response()->json(['status' => 1,'message' => 'Successfully created new account.']);
         

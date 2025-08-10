@@ -32,7 +32,7 @@ class SignupController extends Controller
         $useracc = User::create([
             'Username' => $data->username,
             'Email' => $data->email,
-            'Usertype'=>3,
+            'Usertype'=>'G',
             'Password' => Hash::make($data->password),
         ]);
 
@@ -47,7 +47,7 @@ class SignupController extends Controller
                 'Weight' => $data->weight,
                 'Height' => $data->height,
                 'Rank' => $data->rank,
-                'Usertype' => 3,
+                'Usertype' => 'G',
                 'Address'=> $data->address,
                 'Email' => $data->email
              ]);

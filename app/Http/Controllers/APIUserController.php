@@ -27,7 +27,7 @@ class APIUserController extends Controller
     {
         $userTypeList =  UserTypes::get()->map(function($row){
             return array(
-                'value' => $row->ID,
+                'value' => $row->Code,
                 'description' => $row->UserType
             );
         })->toArray();
@@ -56,7 +56,7 @@ class APIUserController extends Controller
             ],
             'Usertype' => [
                     'required',
-                    'integer',
+                    'string',
                     Rule::in($userID)
             ],
         ], [
@@ -81,7 +81,7 @@ class APIUserController extends Controller
         User::create([
             'Username' => $request->Username,
             'Email' => $request->Email,
-            'Usertype'=>3,
+            'Usertype'=>$request->Usertype,
             'Password' => Hash::make($request->Password),
         ]);
         $response = [
