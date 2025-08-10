@@ -16,7 +16,7 @@
 
 ## About The Project
 
-A Laravel-based Crew Management System designed to efficiently manage crew members, schedules, and assignments.
+A Laravel-based Crew Management System designed to efficiently manage crew members.
 
 ## Getting Started
 
