@@ -42,3 +42,5 @@ Run these commands in order:
 ### Create an Admin/Staff account thru API
 [api/user/save](http://127.0.0.1:8000/api/user/save)
 
+## Create Guest account thru Registration 
+
