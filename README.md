@@ -37,3 +37,8 @@ Follow these steps to set up the project locally:
 ## 🚀 Quick Setup
 Run these commands in order:  
 `composer install` → `php artisan migrate --path=/database/migrations/create_database.php` → `php artisan migrate` → `cp env_local .env`  → `php artisan serve`
+
+
+### Create an Admin/Staff account thru API
+[api/user/save](http://127.0.0.1:8000/api/user/save)
+
