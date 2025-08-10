@@ -21,7 +21,7 @@
                                 required>
                         </div>
                         <div class="col-lg-8 mb-3">
-                            <input type="text" class="form-control" id="email" name="email" placeholder="Email" v-model="email"
+                            <input type="text" class="form-control" id="email" name="email" placeholder="Email" v-model="email" @blur="isvalidEmail"
                                 required>
                             <p class="text-danger" v-show="emailError">Please input a valid email</p>
                         </div>
@@ -34,11 +34,11 @@
                                 v-model="age" readonly>
                         </div>
                         <div class="col-lg-4  mb-3">
-                            <input type="text" class="form-control" id="weight" name="weight"
+                            <input type="text" class="form-control" id="weight" name="weight" v-model="weight" @keypress="validateInteger"
                                 placeholder="Weight (in kg)">
                         </div>
                         <div class="col-lg-4  mb-3">
-                            <input type="text" class="form-control" id="height" name="height"
+                            <input type="text" class="form-control" id="height" name="height" v-model="height" @keypress="validateInteger"
                                 placeholder="Height (in cm)">
                         </div>
                         <div class="col-lg-12 mb-3">
@@ -93,7 +93,9 @@
                         bdate: "",
                         age: "",
                         email:"",
-                        emailError:false
+                        emailError:false,
+                        weight:"",
+                        height:""
                     }
                 },
                 methods: {
@@ -119,6 +121,17 @@
                         }
                         
                     },
+                    validateInteger(event) {
+                        const key = String.fromCharCode(event.keyCode || event.which);
+                        if ([8, 9, 13, 27, 46].includes(event.keyCode) || 
+                            (event.ctrlKey && [65, 67, 86, 88].includes(event.keyCode))) {
+                            return;
+                        }
+                        
+                        if (!/^\d$/.test(key)) {
+                            event.preventDefault();
+                        }
+                    }
                 },
                 watch: {
                     bdate(date) {

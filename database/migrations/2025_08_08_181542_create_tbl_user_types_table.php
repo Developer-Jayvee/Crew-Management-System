@@ -22,8 +22,8 @@ return new class extends Migration
 
         DB::connection('mysql_users')->table('tblUserTypes')->insert([
             ['UserType' => 'Admin'],
-            ['UserType' => 'Staff'],
-            ['UserType' => 'Guest']
+            ['UserType' => 'Guest'],
+            ['UserType' => 'Staff']
         ]);
     }
 
