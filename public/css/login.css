@@ -1,0 +1,11 @@
+*{
+    box-sizing: 0;
+}
+body{
+    background-image: url('/images/background-login.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100vh;
+    overflow: hidden;
+}

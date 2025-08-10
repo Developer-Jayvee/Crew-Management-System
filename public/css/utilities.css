@@ -1,0 +1,10 @@
+.red-document td {
+  background-color: rgb(216, 64, 64);
+  color:white;
+}
+.yellow-document td{
+  background-color: rgb(247, 247, 114); 
+}
+.orange-document td{
+  background-color: rgb(233, 182, 86); 
+}
